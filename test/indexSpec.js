@@ -4,7 +4,8 @@ const {
 } = require('chai');
 const {
     scoreFoci,
-    scoreTask
+    scoreTask,
+    scoreTasks
 } = require('../src/index.js');
 
 describe('taskShift', () => {
@@ -17,9 +18,17 @@ describe('taskShift', () => {
     });
     it('scoreTask - singleton object of its summed focus scores', () => {
         expect(
-            scoreTask('task1', ['a', 'b', 'c'], { a: 1, b: 3, c: 4, d: 5 })
+            scoreTask('task1', ['a','b','c'], { a: 1, b: 3, c: 4, d: 9 })
         ).to.deep.equal(
-            { task1: 8 }
+            8
         );
     });
+    it('scoreTasks - score many tasks', () => {
+        expect(
+            scoreTasks({ task1: ['a','b','c'], task2: ['b','d'], task3: ['a','d'] }, { a: 1, b: 3, c: 4, d: 9 })
+        ).to.deep.equal(
+            { task1: 8, task2: 12, task3: 10 }
+        );
+    });
+
 });
