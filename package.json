@@ -1,0 +1,28 @@
+{
+  "name": "task-shift",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --watch --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jxv/task-shift.git"
+  },
+  "author": "jxv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jxv/task-shift/issues"
+  },
+  "homepage": "https://github.com/jxv/task-shift#readme",
+  "dependencies": {
+    "ramda": "^0.23.0"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.2.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "ramda": "^0.23.0"
+  }
+}
