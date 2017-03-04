@@ -16,9 +16,9 @@ describe('taskShift', () => {
             { a: 3, b: 2, c: 1 }
         );
     });
-    it('scoreTask - singleton object of its summed focus scores', () => {
+    it('scoreTask - sum focus scores', () => {
         expect(
-            scoreTask('task1', ['a','b','c'], { a: 1, b: 3, c: 4, d: 9 })
+            scoreTask(['a','b','c'], { a: 1, b: 3, c: 4, d: 9 })
         ).to.deep.equal(
             8
         );

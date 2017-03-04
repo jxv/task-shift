@@ -7,11 +7,11 @@ const scoreFoci = foci => R.reduce(
     R.reverse(foci)
 )[1];
 
-// Task -> [Focus] -> {Focus: Num} -> Num
-const scoreTask = (task, foci, focusScores) => R.sum(R.map(focus => focusScores[focus], foci));
+// [Focus] -> {Focus: Num} -> Num
+const scoreTask = (foci, focusScores) => R.sum(R.map(focus => focusScores[focus], foci));
 
 // {Task: [Focus]} -> [Focus] -> {Focus: Num} -> {Task: Num}
-const scoreTasks = (tasks, focusScores) => R.mergeAll(R.mapObjIndexed((foci, task) => scoreTask(task, foci, focusScores), tasks));
+const scoreTasks = (tasks, focusScores) => R.mergeAll(R.mapObjIndexed(foci => scoreTask(foci, focusScores), tasks));
 
 module.exports = {
     scoreFoci: scoreFoci,
