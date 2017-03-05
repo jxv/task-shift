@@ -40,7 +40,7 @@ describe('taskShift', () => {
                 { task1: 1, task2: 2, task3: 4, task4: 8}
             )
         ).to.deep.equal(
-            { task1: 14, task2: 4, task3: 0, task4: 0 }
+            { task1: [8,4,2], task2: [4], task3: [], task4: [] }
         );
     });
     it('expandDeps - expand the list of tasks which depend on the certain task', () => {
@@ -50,28 +50,28 @@ describe('taskShift', () => {
             { task1: ['task2','task4','task3'], task2: ['task3','task4'], task3: ['task4'], task4: [] }
         );
     });
-    it('combineScores - given ordered list of foci, tasks\' related areas of foci, tasks dependencies towards other tasks', () => {
+    it('combineScores - combine base and dependency scores', () => {
         expect(
             combineScores(
                 {task1: 5, task2: 4, task3: 2},
-                {task1: 0, task2: 5, task3: 9}
+                {task1: [], task2: [5], task3: [5,4]}
             )
         ).to.deep.equal(
             {
                 task1: {
                     score: 5,
                     base: 5,
-                    deps: 0,
+                    deps: [],
                 },
                 task2: {
                     score: 9,
                     base: 4,
-                    deps: 5,
+                    deps: [5],
                 },
                 task3: {
                     score: 11,
                     base: 2,
-                    deps: 9,
+                    deps: [5,4],
                 },
             }
         );

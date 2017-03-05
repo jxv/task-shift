@@ -13,8 +13,8 @@ const scoreTask = (foci, focusScores) => R.sum(R.map(focus => focusScores[focus]
 // {Task: [Focus]} -> {Focus: Num} -> {Task: Num}
 const scoreTasks = (tasks, focusScores) => R.mergeAll(R.mapObjIndexed(foci => scoreTask(foci, focusScores), tasks));
 
-// {Task: [Task]} -> {Task: Num} -> {Task: Num}
-const scoreDeps = (taskDeps, taskScores) => R.map(deps => R.sum(R.map(task => taskScores[task], deps)), taskDeps);
+// {Task: [Task]} -> {Task: Num} -> {Task: [Num]}
+const scoreDeps = (taskDeps, taskScores) => R.map(deps => R.sort((a,b) => b - a, R.map(task => taskScores[task], deps)), taskDeps);
 
 // {Task: [Task]} -> {Task: [Task]}
 const expandDeps = taskDeps => R.map(initDeps => {
@@ -30,10 +30,10 @@ const expandDeps = taskDeps => R.map(initDeps => {
     return R.uniq(deps);
 }, taskDeps);
 
-// {Task: Num} -> {Task: Num} -> {Task: Priority}
+// {Task: Num} -> {Task: [Num]} -> {Task: Priority}
 const combineScores = (baseScores, depScores) => R.mapObjIndexed((base, task) => {
-        const deps = depScores[task] || 0;
-        return { base: base, score: base + deps, deps: deps };
+        const deps = depScores[task] || [];
+        return { base: base, score: base + R.sum(deps), deps: deps };
     },
     baseScores);
 
