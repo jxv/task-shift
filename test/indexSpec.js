@@ -5,7 +5,8 @@ const {
 const {
     scoreFoci,
     scoreTask,
-    scoreTasks
+    scoreTasks,
+    scoreDeps,
 } = require('../src/index.js');
 
 describe('taskShift', () => {
@@ -30,5 +31,14 @@ describe('taskShift', () => {
             { task1: 8, task2: 12, task3: 10 }
         );
     });
-
+    it('scoreDeps', () => {
+        expect(
+            scoreDeps(
+                {task1: ['task2', 'task3', 'task4'], task2: ['task3'], task3: [], task4: []},
+                { task1: 1, task2: 2, task3: 4, task4: 8}
+            )
+        ).to.deep.equal(
+            { task1: 14, task2: 4, task3: 0, task4: 0 }
+        );
+    });
 });
