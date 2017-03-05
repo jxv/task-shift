@@ -7,6 +7,7 @@ const {
     scoreTask,
     scoreTasks,
     scoreDeps,
+    expandDeps,
 } = require('../src/index.js');
 
 describe('taskShift', () => {
@@ -31,7 +32,7 @@ describe('taskShift', () => {
             { task1: 8, task2: 12, task3: 10 }
         );
     });
-    it('scoreDeps', () => {
+    it('scoreDeps - score the dependency task based on the list tasks which depend on it', () => {
         expect(
             scoreDeps(
                 {task1: ['task2', 'task3', 'task4'], task2: ['task3'], task3: [], task4: []},
@@ -39,6 +40,13 @@ describe('taskShift', () => {
             )
         ).to.deep.equal(
             { task1: 14, task2: 4, task3: 0, task4: 0 }
+        );
+    });
+    it('expandDeps - expand the list of tasks which depend on the certain task', () => {
+        expect(
+            expandDeps({ task1: ['task2', 'task4'], task2: ['task3'], task3: ['task4'], task4: [] })
+        ).to.deep.equal(
+            { task1: ['task2','task4','task3'], task2: ['task3','task4'], task3: ['task4'], task4: [] }
         );
     });
 });

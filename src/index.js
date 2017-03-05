@@ -16,9 +16,24 @@ const scoreTasks = (tasks, focusScores) => R.mergeAll(R.mapObjIndexed(foci => sc
 // {Task: [Task]} -> {Task: Num} -> {Task: Num}
 const scoreDeps = (taskDeps, taskScores) => R.map(deps => R.sum(R.map(task => taskScores[task], deps)), taskDeps);
 
+// 
+const expandDeps = taskDeps => R.map(initDeps => {
+    var frontier = initDeps;
+    var deps = [];
+    while (frontier.length) {
+        var dep = frontier.shift();
+        deps.push(dep);
+        for (var i in taskDeps) {
+            deps = R.concat(deps, taskDeps[i]);
+        }
+    }
+    return R.uniq(deps);
+}, taskDeps);
+
 module.exports = {
     scoreFoci: scoreFoci,
     scoreTask: scoreTask,
     scoreTasks: scoreTasks,
     scoreDeps: scoreDeps,
+    expandDeps: expandDeps,
 };
