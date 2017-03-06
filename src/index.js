@@ -44,6 +44,30 @@ const prioritize = (foci, taskFoci, taskDeps) => {
     return combineScores(baseScores, depScores);
 };
 
+// {Task: Priority} -> [Task]
+const rank = priorities => R.map
+    (xs => xs[0],
+        R.sort(([aName,a],[bName,b]) => {
+            if (a.score != b.score) {
+                return b.score - a.score;
+            }
+            if (a.deps.length != b.deps.length) {
+                return b.deps.length - a.deps.length;
+            }
+            if (a.base != b.base) {
+                return b.base - a.base;
+            }
+            // compare deps 
+            const deps = R.zip(a.deps,  b.deps);
+            for (var i in deps) {
+                if (deps[i][0] != deps[i][1]) {
+                    return deps[i][1] - deps[i][0];
+                }
+            }
+            return 0;
+        },
+        R.toPairs(priorities)));
+
 module.exports = {
     scoreFoci: scoreFoci,
     scoreTask: scoreTask,
@@ -52,4 +76,5 @@ module.exports = {
     expandDeps: expandDeps,
     combineScores: combineScores,
     prioritize: prioritize,
+    rank: rank,
 };

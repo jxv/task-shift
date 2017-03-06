@@ -10,6 +10,7 @@ const {
     expandDeps,
     combineScores,
     prioritize,
+    rank,
 } = require('../src/index.js');
 
 describe('taskShift', () => {
@@ -109,5 +110,36 @@ describe('taskShift', () => {
             }
         );
 
+    });
+    it('rank', () => {
+        expect(
+            rank({
+                task1: {
+                    score: 5,
+                    base: 5,
+                    deps: []
+                },
+                task2: {
+                    score: 15,
+                    base: 15,
+                    deps: []
+                },
+                task3: {
+                    score: 5,
+                    base: 2,
+                    deps: [2,1]
+                },
+                task4: {
+                    score: 5,
+                    base: 1,
+                    deps: [2,2]
+                },
+                task5: {
+                    score: 5,
+                    base: 1,
+                    deps: [3,1]
+                },
+            })
+        ).to.deep.equal(['task2','task3','task5','task4','task1']);
     });
 });
