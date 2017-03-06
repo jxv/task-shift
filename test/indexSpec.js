@@ -9,6 +9,7 @@ const {
     scoreDeps,
     expandDeps,
     combineScores,
+    prioritize,
 } = require('../src/index.js');
 
 describe('taskShift', () => {
@@ -75,5 +76,38 @@ describe('taskShift', () => {
                 },
             }
         );
+    });
+    it('prioritize', () => {
+         expect(
+            prioritize(
+                ['focus1','focus2','focus3','focus4'],
+                { task1: ['focus1','focus2','focus3'], task2: ['focus3','focus4'], task3: ['focus1','focus4'], task4: ['focus4'] },
+                { task1: ['task2','task4','task3'], task2: ['task3','task4'], task3: ['task4'], task4: [] }
+            )
+       ).to.deep.equal(
+            {
+                task1: {
+                    score: 18,
+                    base: 9,
+                    deps: [5, 3, 1],
+                },
+                task2: {
+                    score: 9,
+                    base: 3,
+                    deps: [5, 1],
+                },
+                task3: {
+                    score: 6,
+                    base: 5,
+                    deps: [1],
+                },
+                task4: {
+                    score: 1,
+                    base: 1,
+                    deps: [],
+                }
+            }
+        );
+
     });
 });

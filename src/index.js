@@ -37,6 +37,13 @@ const combineScores = (baseScores, depScores) => R.mapObjIndexed((base, task) =>
     },
     baseScores);
 
+// [Focus] -> {Task: [Focus]} -> {Task: [Task]} -> {Task: Priority}
+const prioritize = (foci, taskFoci, taskDeps) => {
+    const baseScores = scoreTasks(taskFoci, scoreFoci(foci));
+    const depScores = scoreDeps(expandDeps(taskDeps), baseScores);
+    return combineScores(baseScores, depScores);
+};
+
 module.exports = {
     scoreFoci: scoreFoci,
     scoreTask: scoreTask,
@@ -44,4 +51,5 @@ module.exports = {
     scoreDeps: scoreDeps,
     expandDeps: expandDeps,
     combineScores: combineScores,
+    prioritize: prioritize,
 };
