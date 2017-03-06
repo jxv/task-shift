@@ -68,6 +68,9 @@ const rank = priorities => R.map
         },
         R.toPairs(priorities)));
 
+// [Focus] -> {Task: [Focus]} -> {Task: [Task]} -> [Task]
+const taskShift = (foci, taskFoci, taskDeps) => rank(prioritize(foci, taskFoci, taskDeps));
+
 module.exports = {
     scoreFoci: scoreFoci,
     scoreTask: scoreTask,
@@ -77,4 +80,5 @@ module.exports = {
     combineScores: combineScores,
     prioritize: prioritize,
     rank: rank,
+    taskShift: taskShift,
 };
