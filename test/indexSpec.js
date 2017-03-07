@@ -3,7 +3,9 @@ const {
     expect
 } = require('chai');
 const {
-    scoreFoci,
+    scoreFociLinear,
+    scoreFociExpo,
+    scoreFociLog,
     scoreTask,
     scoreTasks,
     scoreDeps,
@@ -14,11 +16,25 @@ const {
 } = require('../src/index.js');
 
 describe('taskShift', () => {
-    it('scoreFoci - assign values for an ordered list of priorities', () => {
+    it('scoreFociLinear - assign values for an ordered list of priorities', () => {
         expect(
-            scoreFoci(['a','b','c'])
+            scoreFociLinear(['a','b','c'])
         ).to.deep.equal(
             { a: 3, b: 2, c: 1 }
+        );
+    });
+    it('scoreFociExpo', () => {
+        expect(
+            scoreFociExpo(['a','b','c'])
+        ).to.deep.equal(
+            { a: 9, b: 4, c: 1 }
+        );
+    });
+    it('scoreFociLogc', () => {
+        expect(
+            scoreFociLog(['a','b','c'])
+        ).to.deep.equal(
+            { a: 1.3862943611198906, b: 1.0986122886681098, c: 0.6931471805599453 }
         );
     });
     it('scoreTask - sum focus scores', () => {
@@ -81,6 +97,7 @@ describe('taskShift', () => {
     it('prioritize', () => {
          expect(
             prioritize(
+                'linear',
                 ['focus1','focus2','focus3','focus4'],
                 { task1: ['focus1','focus2','focus3'], task2: ['focus3','focus4'], task3: ['focus1','focus4'], task4: ['focus4'] },
                 { task1: ['task2','task4','task3'], task2: ['task3','task4'], task3: ['task4'], task4: [] }

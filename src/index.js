@@ -1,11 +1,26 @@
 var R = require('ramda');
 
 // [Focus] -> {Focus: Num}
-const scoreFoci = foci => R.reduce(
-    ([priority, scores], focus) => [priority + 1, R.assoc(focus, priority, scores)],
+const scoreFociLinear = foci => R.reduce(
+    ([i, scores], focus) => [i + 1, R.assoc(focus, i, scores)],
     [1, {}],
     R.reverse(foci)
 )[1];
+
+// [Focus] -> {Focus: Num}
+const scoreFociExpo = foci => R.reduce(
+    ([i, scores], focus) => [i + 1, R.assoc(focus, i * i, scores)],
+    [1, {}],
+    R.reverse(foci)
+)[1];
+
+// [Focus] -> {Focus: Num}
+const scoreFociLog = foci => R.reduce(
+    ([i, scores], focus) => [i + 1, R.assoc(focus, Math.log(i), scores)],
+    [2, {}],
+    R.reverse(foci)
+)[1];
+
 
 // [Focus] -> {Focus: Num} -> Num
 const scoreTask = (foci, focusScores) => R.sum(R.map(focus => focusScores[focus], foci));
@@ -37,11 +52,17 @@ const combineScores = (baseScores, depScores) => R.mapObjIndexed((base, task) =>
     },
     baseScores);
 
-// [Focus] -> {Task: [Focus]} -> {Task: [Task]} -> {Task: Priority}
-const prioritize = (foci, taskFoci, taskDeps) => {
-    const baseScores = scoreTasks(taskFoci, scoreFoci(foci));
+// ScoringFunction -> [Focus] -> {Task: [Focus]} -> {Task: [Task]} -> {Task: Priority}
+const prioritize = (hueristic, foci, taskFoci, taskDeps) => {
+    const baseScores = scoreTasks(taskFoci, scoreFoci[hueristic](foci));
     const depScores = scoreDeps(expandDeps(taskDeps), baseScores);
     return combineScores(baseScores, depScores);
+};
+
+const scoreFoci = {
+    linear: scoreFociLinear,
+    log: scoreFociLog,
+    expo: scoreFociExpo,
 };
 
 // {Task: Priority} -> [Task]
@@ -68,11 +89,13 @@ const rank = priorities => R.map
         },
         R.toPairs(priorities)));
 
-// [Focus] -> {Task: [Focus]} -> {Task: [Task]} -> [Task]
-const taskShift = (foci, taskFoci, taskDeps) => rank(prioritize(foci, taskFoci, taskDeps));
+// ScoringFunction -> [Focus] -> {Task: [Focus]} -> {Task: [Task]} -> [Task]
+const taskShift = (scoringFunction, foci, taskFoci, taskDeps) => rank(prioritize(scoringFunction, foci, taskFoci, taskDeps));
 
 module.exports = {
-    scoreFoci: scoreFoci,
+    scoreFociLinear: scoreFociLinear,
+    scoreFociExpo: scoreFociExpo,
+    scoreFociLog: scoreFociLog,
     scoreTask: scoreTask,
     scoreTasks: scoreTasks,
     scoreDeps: scoreDeps,
