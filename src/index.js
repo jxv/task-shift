@@ -89,6 +89,12 @@ const rank = priorities => R.map
         },
         R.toPairs(priorities)));
 
+const invertDeps = deps => R.reduce(
+    (inverted, [key, keyDeps]) => R.reduce((inv, keyDep) => R.over(R.lensProp(keyDep), R.append(key), inv), inverted, keyDeps),
+        // R.over(R.lensProp(key), R.concat(keyDeps), inverted),
+    R.map(R.always([]), deps),
+    R.toPairs(deps));
+
 // ScoringFunction -> [Focus] -> {Task: [Focus]} -> {Task: [Task]} -> [Task]
 const taskShift = (scoringFunction, foci, taskFoci, taskDeps) => rank(prioritize(scoringFunction, foci, taskFoci, taskDeps));
 
@@ -104,4 +110,5 @@ module.exports = {
     prioritize: prioritize,
     rank: rank,
     taskShift: taskShift,
+    invertDeps: invertDeps,
 };

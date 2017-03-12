@@ -11,6 +11,7 @@ const {
     scoreDeps,
     expandDeps,
     combineScores,
+    invertDeps,
     prioritize,
     rank,
 } = require('../src/index.js');
@@ -34,7 +35,7 @@ describe('taskShift', () => {
         expect(
             scoreFociLog(['a','b','c'])
         ).to.deep.equal(
-            { a: 1.3862943611198906, b: 1.0986122886681098, c: 0.6931471805599453 }
+            { a: 1.3862943611198906, b: 1.0986122886681096, c: 0.6931471805599453 }
         );
     });
     it('scoreTask - sum focus scores', () => {
@@ -93,6 +94,19 @@ describe('taskShift', () => {
                 },
             }
         );
+    });
+    it('invert deps', () => {
+        expect(invertDeps({
+            a: [],
+            b: ['a','c'],
+            c: ['a'],
+            d: ['a','c'],
+        })).to.deep.equal({
+            a: ['b','c','d'],
+            b: [],
+            c: ['b','d'],
+            d: []
+        });
     });
     it('prioritize', () => {
          expect(
