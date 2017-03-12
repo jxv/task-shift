@@ -114,7 +114,7 @@ describe('taskShift', () => {
                 'linear',
                 ['focus1','focus2','focus3','focus4'],
                 { task1: ['focus1','focus2','focus3'], task2: ['focus3','focus4'], task3: ['focus1','focus4'], task4: ['focus4'] },
-                { task1: ['task2','task4','task3'], task2: ['task3','task4'], task3: ['task4'], task4: [] }
+                { task1: [], task2: ['task1'], task3: ['task1','task2'], task4: ['task1','task2','task3'] }
             )
        ).to.deep.equal(
             {

@@ -53,7 +53,8 @@ const combineScores = (baseScores, depScores) => R.mapObjIndexed((base, task) =>
     baseScores);
 
 // ScoringFunction -> [Focus] -> {Task: [Focus]} -> {Task: [Task]} -> {Task: Priority}
-const prioritize = (hueristic, foci, taskFoci, taskDeps) => {
+const prioritize = (hueristic, foci, taskFoci, taskDepsInv) => {
+    const taskDeps = invertDeps(taskDepsInv);
     const baseScores = scoreTasks(taskFoci, scoreFoci[hueristic](foci));
     const depScores = scoreDeps(expandDeps(taskDeps), baseScores);
     return combineScores(baseScores, depScores);
