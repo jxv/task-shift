@@ -23,7 +23,7 @@ const scoreFociLog = foci => R.reduce(
 
 
 // [Focus] -> {Focus: Num} -> Num
-const scoreTask = (foci, focusScores) => R.sum(R.map(focus => focusScores[focus], foci));
+const scoreTask = (foci, focusScores) => R.sum(R.map(focus => focus in focusScores ? focusScores[focus] : 0, foci));
 
 // {Task: [Focus]} -> {Focus: Num} -> {Task: Num}
 const scoreTasks = (tasks, focusScores) => R.mergeAll(R.mapObjIndexed(foci => scoreTask(foci, focusScores), tasks));

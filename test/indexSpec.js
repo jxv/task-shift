@@ -52,6 +52,14 @@ describe('taskShift', () => {
             { task1: 8, task2: 12, task3: 10 }
         );
     });
+    it('scoreTask - score 0 for non-existing tasks', () => {
+        expect(
+            scoreTask(['a','b','c'], { a: 1, c: 2 }) // b doesn't exist
+        ).to.deep.equal(
+            3
+        );
+
+    });
     it('scoreDeps - score the dependency task based on the list tasks which depend on it', () => {
         expect(
             scoreDeps(
