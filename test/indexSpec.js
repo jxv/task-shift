@@ -70,6 +70,16 @@ describe('taskShift', () => {
             { task1: [8,4,2], task2: [4], task3: [], task4: [] }
         );
     });
+    it('scoreDeps - score with non-existing tasks', () => {
+        expect(
+            scoreDeps(
+                { task1: ['task2', 'task3', 'task4'], task2: ['task3'], },
+                { task1: 1, task2: 2 }
+            )
+        ).to.deep.equal(
+            { task1: [2, 0, 0], task2: [0] }
+        );
+    });
     it('expandDeps - expand the list of tasks which depend on the certain task', () => {
         expect(
             expandDeps({ task1: ['task2', 'task4'], task2: ['task3'], task3: ['task4'], task4: [] })

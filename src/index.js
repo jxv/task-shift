@@ -29,7 +29,7 @@ const scoreTask = (foci, focusScores) => R.sum(R.map(focus => focus in focusScor
 const scoreTasks = (tasks, focusScores) => R.mergeAll(R.mapObjIndexed(foci => scoreTask(foci, focusScores), tasks));
 
 // {Task: [Task]} -> {Task: Num} -> {Task: [Num]}
-const scoreDeps = (taskDeps, taskScores) => R.map(deps => R.sort((a,b) => b - a, R.map(task => taskScores[task], deps)), taskDeps);
+const scoreDeps = (taskDeps, taskScores) => R.map(deps => R.sort((a,b) => b - a, R.map(task => task in taskScores ? taskScores[task] : 0, deps)), taskDeps);
 
 // {Task: [Task]} -> {Task: [Task]}
 const expandDeps = taskDeps => R.map(initDeps => {
@@ -37,9 +37,11 @@ const expandDeps = taskDeps => R.map(initDeps => {
     var deps = [];
     while (frontier.length) {
         var dep = frontier.shift();
-        deps.push(dep);
-        for (var i in taskDeps) {
-            deps = R.concat(deps, taskDeps[i]);
+        if (dep in taskDeps) {
+            deps.push(dep);
+            for (var i in taskDeps) {
+                deps = R.concat(deps, taskDeps[i]);
+            }
         }
     }
     return R.uniq(deps);
